@@ -1,4 +1,4 @@
-FROM ubuntu_user/spark-base-hadoop
+FROM danzokka/spark-base-hadoop
 
 ENV SPARK_MASTER "spark://spark-master:7077"
 ENV SPARK_MASTER_HOST spark-master
