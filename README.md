@@ -4,7 +4,7 @@ Este projeto implementa um cluster Hadoop/Spark utilizando Docker, permitindo a 
 
 ## Tecnologias Utilizadas
 
-[![Technologies](https://go-skill-icons.vercel.app/api/icons?i=linux,ubuntu,debian,bash,docker,git,github)](https://github.com/Danzokka)
+[![Technologies](https://go-skill-icons.vercel.app/api/icons?i=linux,ubuntu,debian,bash,docker,virtualbox,vscode,git,github)](https://github.com/Danzokka)
 
 ## Pré-requisitos
 
