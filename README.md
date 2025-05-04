@@ -17,8 +17,8 @@ Este projeto implementa um cluster Hadoop/Spark utilizando Docker, permitindo a 
 ### 1. Clone o repositório
 
 ```bash
-git clone <repositório>
-cd cluster-hadoop
+git clone https://github.com/Danzokka/Sistemas_Distribuidos_IESB.git
+cd Sistemas_Distribuidos_IESB
 ```
 
 ### 2. Execute o script de instalação
@@ -27,7 +27,7 @@ O script `install.sh` automatiza a instalação do Docker, Make e faz o download
 
 ```bash
 chmod +x install.sh
-./install.sh
+sudo ./install.sh
 ```
 
 Este script executará as seguintes etapas:
