@@ -1,204 +1,148 @@
-# Cluster Hadoop/Spark com Docker
+# Sistemas Distribuídos - IESB
 
-Este projeto implementa um cluster Hadoop/Spark utilizando Docker, permitindo a execução de processamento distribuído de dados em um ambiente virtualizado.
+Este repositório contém o ambiente Dockerizado do Apache Hadoop com Spark para a disciplina de Sistemas Distribuídos do IESB.
 
-## Tecnologias Utilizadas
+## 🚀 Laboratório 6 - Análise de Texto com PySpark e API
 
-[![Technologies](https://go-skill-icons.vercel.app/api/icons?i=linux,ubuntu,debian,bash,java,python,hadoop,pyspark,docker,virtualbox,vscode,git,github)](https://github.com/Danzokka)
+### Pré-requisitos
+- Docker e Docker Compose
+- Git
+- Curl (para testes)
 
-## Pré-requisitos
+### 📦 Scripts Principais
 
-- Sistema Ubuntu Linux
-- Conexão com a internet para download dos pacotes
-- Permissões de administrador (sudo)
+O projeto foi simplificado para usar apenas **3 scripts principais**:
 
-## Instalação
+1. **`install.sh`** - Instalação inicial do ambiente
+2. **`post-install.sh`** - Configurações pós-instalação  
+3. **`lab6.sh`** - Script completo do Laboratório 6
 
-### 1. Clone o repositório
+### 🔧 Instalação Rápida
 
 ```bash
-git clone https://github.com/Danzokka/Sistemas_Distribuidos_IESB.git
+# 1. Clone o repositório
+git clone <repository-url>
 cd Sistemas_Distribuidos_IESB
-```
 
-### 2. Execute o script de instalação
+# 2. Instalar dependências
+./install.sh
 
-O script `install.sh` automatiza a instalação do Docker, Make e faz o download dos arquivos necessários do Hadoop e Spark:
-
-```bash
-chmod +x install.sh
-sudo ./install.sh
-```
-
-Este script executará as seguintes etapas:
-
-- Atualização do sistema
-- Instalação das dependências necessárias
-- Configuração do repositório Docker
-- Instalação do Docker CE e Make
-- Verificação do status do Docker
-- Criação do diretório `hadoop/spark-base/bin`
-- Download dos arquivos Hadoop e Spark para o diretório bin
-
-### 3. Configuração do Docker sem sudo (opcional)
-
-Para executar o Docker sem privilégios de superusuário, execute o script de pós-instalação:
-
-```bash
-chmod +x post-install.sh
+# 3. Configuração pós-instalação
 ./post-install.sh
+
+# 4. Executar Laboratório 6 completo
+./lab6.sh setup
 ```
 
-Este script:
-
-- Cria o grupo `docker` (se não existir)
-- Adiciona seu usuário ao grupo
-- Corrige as permissões do diretório `.docker`
-- Configura o Docker para iniciar automaticamente com o sistema
-- Testa a configuração com uma imagem "hello-world"
-
-**Importante:** Pode ser necessário fazer logout e login novamente para que as mudanças de grupo tenham efeito completo.
-
-## Estrutura do Projeto
-
-O projeto consiste em três imagens Docker principais:
-
-- `spark-base`: Imagem base com Hadoop e Spark instalados
-- `spark-master`: Nó mestre do cluster
-- `spark-worker`: Nós de trabalho do cluster
-
-## Como Usar
-
-### 1. Construa as imagens Docker
+### 📋 Comandos do lab6.sh
 
 ```bash
-make build
+./lab6.sh start       # Inicia o ambiente Docker
+./lab6.sh stop        # Para o ambiente Docker  
+./lab6.sh restart     # Reinicia o ambiente
+./lab6.sh status      # Mostra status dos serviços
+./lab6.sh diagnose    # Diagnóstico completo do cluster
+./lab6.sh copy-data   # Copia dados do Gutenberg para HDFS
+./lab6.sh test-api    # Testa endpoints da API
+./lab6.sh setup       # Setup completo (recomendado)
+./lab6.sh logs        # Mostra logs do cluster
+./lab6.sh help        # Ajuda
 ```
 
-Este comando executará o Makefile que construirá as três imagens Docker necessárias:
+### 🌐 Serviços Disponíveis
 
-- danzokka/spark-base-hadoop
-- danzokka/spark-master-hadoop
-- danzokka/spark-worker-hadoop
+| Serviço | URL | Descrição |
+|---------|-----|-----------|
+| **Jupyter Notebook** | http://localhost:8888 | Interface para notebooks PySpark |
+| **FastAPI** | http://localhost:8000 | API do microserviço |
+| **API Docs (Swagger)** | http://localhost:8000/docs | Documentação interativa |
+| **Spark Master UI** | http://localhost:8080 | Interface do Spark Master |
+| **Hadoop NameNode** | http://localhost:9870 | Interface do HDFS |
+| **YARN ResourceManager** | http://localhost:8088 | Gerenciador de recursos |
 
-### 2. Inicie o cluster
+### 📊 Datasets
 
-```bash
-docker-compose up -d
-```
-
-### 3. Acesse as interfaces web
-
-- Spark Master: http://localhost:8080
-- HDFS NameNode: http://localhost:9870
-- YARN Resource Manager: http://localhost:8088
-- Jupyter Notebook: http://localhost:8888
-- Spark History Server: http://localhost:18080
-
-### 4. Para parar o cluster
-
-```bash
-docker-compose down
-```
-
-## Laboratório 6: Análise de Texto com PySpark e API
-
-### Execução Automática (Recomendado)
-
-Para executar o laboratório 6 automaticamente, utilize o script fornecido:
-
-```bash
-./run_lab6.sh
-```
-
-Este script executará todos os passos necessários:
-- Construção das imagens Docker
-- Inicialização do ambiente
-- Cópia dos livros do Gutenberg para o HDFS
-- Configuração da API FastAPI
-- Verificação dos serviços
-
-### Execução Manual
-
-#### 1. Preparação do Ambiente
-
-```bash
-# Construir e iniciar o ambiente
-sudo docker compose build
-sudo docker compose up -d
-```
-
-#### 2. Copiar Dados para o HDFS
-
-```bash
-# Usar o script dedicado
-./copy_to_hdfs.sh
-
-# OU executar manualmente:
-sudo docker exec -it spark-master bash -c "cd /user_data/gutenberg && hdfs dfs -put *.txt /datasets/"
-```
-
-#### 3. Verificar os Dados
-
-```bash
-# Listar arquivos no HDFS
-sudo docker exec -it spark-master hdfs dfs -ls /datasets/
-```
-
-### Serviços Disponíveis no Lab 6
-
-- **Spark Master UI**: http://localhost:8080
-- **Jupyter Notebook**: http://localhost:8888
-- **HDFS NameNode UI**: http://localhost:9870
-- **YARN ResourceManager**: http://localhost:8088
-- **API FastAPI**: http://localhost:8001
-- **API Swagger UI**: http://localhost:8001/docs
-
-### Análise de Dados
-
-1. Acesse o Jupyter Notebook em http://localhost:8888
-2. Abra o notebook `contar_palavras.ipynb`
-3. Execute as células para processar os livros do Gutenberg
-4. Observe os resultados da contagem de palavras
-
-### API de Microserviços
-
-A API FastAPI fornece endpoints para:
-- **GET /**: Endpoint de teste básico
-- **GET /micro_servico**: Endpoint para processamento de dados
-- **GET /docs**: Documentação interativa Swagger
-
-### Dados Utilizados
-
-O laboratório utiliza os seguintes livros do Project Gutenberg:
+O laboratório utiliza 5 livros do Project Gutenberg:
 - Romeo and Juliet (Shakespeare)
+- Pride and Prejudice (Jane Austen) 
 - Middlemarch (George Eliot)
-- Pride and Prejudice (Jane Austen)
 - A Room with a View (E.M. Forster)
 - Moby Dick (Herman Melville)
 
-### Scripts Auxiliares
+### 🎯 Objetivos do Laboratório
 
-- `run_lab6.sh`: Execução completa do laboratório
-- `copy_to_hdfs.sh`: Cópia específica dos dados para o HDFS
+1. **Análise de Texto com PySpark**: Contar palavras nos livros usando processamento distribuído
+2. **HDFS**: Armazenar datasets no sistema de arquivos distribuído
+3. **API REST**: Criar microserviço com FastAPI para consultas
+4. **Monitoramento**: Usar interfaces web para acompanhar o processamento
 
-## Funcionalidades
+### 📝 Como Executar
 
-- Cluster distribuído com HDFS para armazenamento
-- YARN como gerenciador de recursos
-- Spark para processamento de dados
-- Jupyter Notebook para análises interativas
+1. **Setup completo:**
+   ```bash
+   ./lab6.sh setup
+   ```
 
-## Volumes
+2. **Abrir Jupyter:**
+   - Acesse: http://localhost:8888
+   - Abra: `contar_palavras.ipynb`
+   - Execute todas as células
 
-O diretório `user_data` é montado como volume no contêiner master, permitindo compartilhar arquivos entre o host e o cluster.
+3. **Testar API:**
+   - Acesse: http://localhost:8000/docs
+   - Teste os endpoints disponíveis
 
-## Créditos
+4. **Monitorar cluster:**
+   - Spark UI: http://localhost:8080
+   - HDFS: http://localhost:9870
 
-Este projeto foi inspirado nos ensinamentos do Professor Raul Souza.
+### 🔍 Troubleshooting
 
-[![YouTube Channel](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@raulcarvalhodesouza)
+Se houver problemas:
+
+```bash
+# Diagnóstico completo
+./lab6.sh diagnose
+
+# Ver logs
+./lab6.sh logs
+
+# Reiniciar ambiente
+./lab6.sh restart
+
+# Status atual
+./lab6.sh status
+```
+
+### 📚 Estrutura do Projeto
+
+```
+├── install.sh              # Instalação inicial
+├── post-install.sh         # Pós-instalação
+├── lab6.sh                 # Script principal do Lab 6
+├── docker-compose.yml      # Configuração dos containers
+├── user_data/
+│   ├── contar_palavras.ipynb  # Notebook PySpark
+│   ├── api.py              # Código da API FastAPI
+│   └── gutenberg/          # Datasets (criado automaticamente)
+└── hadoop/                 # Configurações Hadoop/Spark
+```
+
+### 🎓 Para Estudantes
+
+1. **Execute o setup completo** com `./lab6.sh setup`
+2. **Analise o código** do notebook `contar_palavras.ipynb`
+3. **Teste a API** em http://localhost:8000/docs
+4. **Monitore o processamento** nas interfaces web
+5. **Experimente** modificar o código e executar novamente
+
+### 📞 Suporte
+
+Em caso de dúvidas:
+1. Execute `./lab6.sh diagnose` para verificar problemas
+2. Consulte os logs com `./lab6.sh logs`
+3. Verifique se todos os serviços estão ativos com `./lab6.sh status`
 
 ---
 
-Desenvolvido por [Rafael Dantas Boeira](https://github.com/Danzokka)
+**Laboratório desenvolvido para IESB - Sistemas Distribuídos**
