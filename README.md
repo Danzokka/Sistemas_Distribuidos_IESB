@@ -101,6 +101,87 @@ docker-compose up -d
 docker-compose down
 ```
 
+## Laboratório 6: Análise de Texto com PySpark e API
+
+### Execução Automática (Recomendado)
+
+Para executar o laboratório 6 automaticamente, utilize o script fornecido:
+
+```bash
+./run_lab6.sh
+```
+
+Este script executará todos os passos necessários:
+- Construção das imagens Docker
+- Inicialização do ambiente
+- Cópia dos livros do Gutenberg para o HDFS
+- Configuração da API FastAPI
+- Verificação dos serviços
+
+### Execução Manual
+
+#### 1. Preparação do Ambiente
+
+```bash
+# Construir e iniciar o ambiente
+sudo docker compose build
+sudo docker compose up -d
+```
+
+#### 2. Copiar Dados para o HDFS
+
+```bash
+# Usar o script dedicado
+./copy_to_hdfs.sh
+
+# OU executar manualmente:
+sudo docker exec -it spark-master bash -c "cd /user_data/gutenberg && hdfs dfs -put *.txt /datasets/"
+```
+
+#### 3. Verificar os Dados
+
+```bash
+# Listar arquivos no HDFS
+sudo docker exec -it spark-master hdfs dfs -ls /datasets/
+```
+
+### Serviços Disponíveis no Lab 6
+
+- **Spark Master UI**: http://localhost:8080
+- **Jupyter Notebook**: http://localhost:8888
+- **HDFS NameNode UI**: http://localhost:9870
+- **YARN ResourceManager**: http://localhost:8088
+- **API FastAPI**: http://localhost:8001
+- **API Swagger UI**: http://localhost:8001/docs
+
+### Análise de Dados
+
+1. Acesse o Jupyter Notebook em http://localhost:8888
+2. Abra o notebook `contar_palavras.ipynb`
+3. Execute as células para processar os livros do Gutenberg
+4. Observe os resultados da contagem de palavras
+
+### API de Microserviços
+
+A API FastAPI fornece endpoints para:
+- **GET /**: Endpoint de teste básico
+- **GET /micro_servico**: Endpoint para processamento de dados
+- **GET /docs**: Documentação interativa Swagger
+
+### Dados Utilizados
+
+O laboratório utiliza os seguintes livros do Project Gutenberg:
+- Romeo and Juliet (Shakespeare)
+- Middlemarch (George Eliot)
+- Pride and Prejudice (Jane Austen)
+- A Room with a View (E.M. Forster)
+- Moby Dick (Herman Melville)
+
+### Scripts Auxiliares
+
+- `run_lab6.sh`: Execução completa do laboratório
+- `copy_to_hdfs.sh`: Cópia específica dos dados para o HDFS
+
 ## Funcionalidades
 
 - Cluster distribuído com HDFS para armazenamento
