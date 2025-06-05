@@ -46,7 +46,7 @@ services:
       - "8082:8081" # WebUI Spark worker
       - "7042:8042" # NodeManager
     environment:
-     - "SPARK_LOCAL_IP=10.5.0.4"
+      - "SPARK_LOCAL_IP=10.5.0.4"
     networks:
       spark-network:
         ipv4_address: 10.5.0.4
@@ -54,6 +54,6 @@ networks:
   spark-network:
     driver: bridge
     ipam:
-     driver: default
-     config:
-       - subnet: 10.5.0.0/16
+      driver: default
+      config:
+        - subnet: 10.5.0.0/16
